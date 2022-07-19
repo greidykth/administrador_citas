@@ -1,5 +1,4 @@
 const Alert = ({ alert }) => {
-  console.log(`Alert: ${alert}`);
 
   let text = "";
   let style = "bg-red-600";
