@@ -1,6 +1,14 @@
 
-const Paciente = ({ paciente}) => {
-    const {nombre, propietario, fecha, email, sintomas} = paciente;
+const Paciente = ({ paciente, eliminarPaciente, setPaciente}) => {
+
+    const {nombre, propietario, fecha, email, sintomas, id} = paciente;
+
+    function handleEliminar() {
+        if (confirm(`Esta seguro de eliminar el paciente: ${nombre}`)) {
+            eliminarPaciente(id);
+        }    
+    }
+
   return (
     <div className="m-3 bg-white shadow-lg p-5 rounded-xl border">
       <p className="font-bold text-xl text-indigo-600">Nombre: {""}
@@ -19,8 +27,17 @@ const Paciente = ({ paciente}) => {
         <span className="text-black font-normal text-xl">{sintomas}</span>
       </p>
       <div className="mt-3 flex justify-end">
-        <button className="bg-indigo-600 text-white uppercase font-bold mr-3 p-2 rounded-md">Editar</button>
-        <button className="bg-red-600 text-white uppercase font-bold p-2 rounded-md">ELiminar</button>
+        <button 
+            onClick={() => setPaciente(paciente)}
+            className="bg-indigo-600 text-white uppercase font-bold mr-3 p-2 rounded-md">
+            Editar
+        </button>
+        <button 
+            className="bg-red-600 text-white uppercase font-bold p-2 rounded-md"
+            onClick={handleEliminar}
+            >
+            Eliminar
+        </button>
       </div>
     </div>
   )

@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alert from "./Alert";
 
-export const Formulario = ({ pacientes, setPacientes }) => {
+export const Formulario = ({ pacientes, setPacientes, setPaciente, paciente }) => {
   const [nombre, setNombre] = useState("");
   const [propietario, setPropietario] = useState("");
   const [email, setEmail] = useState("");
   const [fecha, setFecha] = useState("");
   const [sintomas, setSintomas] = useState("");
   const [alert, setAlert] = useState("");
+
+  
+  useEffect(() => {
+    if(Object.keys(pacientes).length > 0) {
+      setNombre(paciente.nombre);
+      setPropietario(paciente.propietario);
+      setEmail(paciente.email);
+      setFecha(paciente.fecha);
+      setSintomas(paciente.sintomas);
+    }
+  }, [paciente])
 
   function crearId() {
     const aleatorio = Math.random().toString(36).substr(2);
@@ -27,7 +38,6 @@ export const Formulario = ({ pacientes, setPacientes }) => {
 
     //Crear objeto paciente
     const objetoPaciente = {
-      id: crearId(),
       nombre,
       propietario,
       email,
@@ -35,12 +45,27 @@ export const Formulario = ({ pacientes, setPacientes }) => {
       sintomas,
     };
 
-    setPacientes([...pacientes, objetoPaciente]);
-    
-    setAlert("success");
-    setTimeout(() => {
-        setAlert("");
-    }, 3000);
+    if(paciente.id){
+      objetoPaciente.id = paciente.id;
+      const pacientesActualizados = pacientes.map( (pacienteState) => pacienteState.id === paciente.id ? objetoPaciente : pacienteState)
+      setPacientes(pacientesActualizados);
+      setPaciente({});
+      setAlert("success");
+      setTimeout(() => {
+          setAlert("");
+      }, 3000);
+      
+    }else{
+      objetoPaciente.id=crearId();
+      setPacientes([...pacientes, objetoPaciente]);
+      
+      setAlert("success");
+      setTimeout(() => {
+          setAlert("");
+      }, 3000);
+
+    }
+
 
     //Limpiar Formulario
     setNombre("");
@@ -146,7 +171,7 @@ export const Formulario = ({ pacientes, setPacientes }) => {
         <input
           type="submit"
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-800 cursor-pointer rounded-md transition-colors"
-          value="Agregar Paciente"
+          value={paciente.id ? "Editar Paciente" : "Agregar Paciente" }
         />
       </form>
     </div>
